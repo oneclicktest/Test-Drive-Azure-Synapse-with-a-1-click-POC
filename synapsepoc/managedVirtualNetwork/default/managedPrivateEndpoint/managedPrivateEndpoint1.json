@@ -1,0 +1,7 @@
+{
+	"name": "managedPrivateEndpoint1",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/edf6dd9d-7c4a-4bca-a997-945f3d60cf4e/resourceGroups/rg-poc-test/providers/Microsoft.Storage/storageAccounts/ajmnugiqxczz6x2poc",
+		"groupId": "dfs"
+	}
+}
