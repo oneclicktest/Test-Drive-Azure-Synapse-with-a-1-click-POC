@@ -19,6 +19,9 @@
 		},
 		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
 			"value": "@{concat('https://',linkedService().keyVaultName,'.vault.azure.net/')}"
+		},
+		"nyc_tlc_yellow_sasUri": {
+			"value": ""
 		}
 	}
 }
