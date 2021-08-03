@@ -1,0 +1,17 @@
+{
+	"name": "Querying_fare_data_adls_refined",
+	"properties": {
+		"content": {
+			"query": "SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/refined/dbo.fares-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0',\n        HEADER_ROW = TRUE\n    ) AS [result]\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "master"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
