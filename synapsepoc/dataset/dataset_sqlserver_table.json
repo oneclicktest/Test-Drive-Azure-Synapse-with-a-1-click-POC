@@ -1,0 +1,65 @@
+{
+	"name": "dataset_sqlserver_table",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LSV2_SqlServer1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "medallion",
+				"type": "nvarchar"
+			},
+			{
+				"name": "hack_license",
+				"type": "nvarchar"
+			},
+			{
+				"name": "vendor_id",
+				"type": "nvarchar"
+			},
+			{
+				"name": "pickup_datetime",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "payment_type",
+				"type": "nvarchar"
+			},
+			{
+				"name": "fare_amount",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "surcharge",
+				"type": "nvarchar"
+			},
+			{
+				"name": "mta_tax",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "tip_amount",
+				"type": "nvarchar"
+			},
+			{
+				"name": "tolls_amount",
+				"type": "nvarchar"
+			},
+			{
+				"name": "total_amount",
+				"type": "float",
+				"precision": 15
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "fares-data"
+		}
+	}
+}
