@@ -49,7 +49,40 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('workspaceName'), '/CopyPipeline1')]",
+			"name": "[concat(parameters('workspaceName'), '/NotebookPipeline1')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "SynapseNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebook": {
+								"referenceName": "Data Exploration and ML Modeling - NYC taxi predict using Spark MLlib",
+								"type": "NotebookReference"
+							},
+							"snapshot": true
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/notebooks/Data Exploration and ML Modeling - NYC taxi predict using Spark MLlib')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/PipelineCopyOnPrem')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -102,8 +135,8 @@
 											"type": "String"
 										},
 										"sink": {
-											"type": "String",
-											"ordinal": 1
+											"name": "medallion",
+											"type": "String"
 										}
 									},
 									{
@@ -112,8 +145,8 @@
 											"type": "String"
 										},
 										"sink": {
-											"type": "String",
-											"ordinal": 2
+											"name": "hack_license",
+											"type": "String"
 										}
 									},
 									{
@@ -122,28 +155,8 @@
 											"type": "String"
 										},
 										"sink": {
-											"type": "String",
-											"ordinal": 3
-										}
-									},
-									{
-										"source": {
-											"name": "rate_code",
+											"name": "vendor_id",
 											"type": "String"
-										},
-										"sink": {
-											"type": "String",
-											"ordinal": 4
-										}
-									},
-									{
-										"source": {
-											"name": "store_and_fwd_flag",
-											"type": "String"
-										},
-										"sink": {
-											"type": "String",
-											"ordinal": 5
 										}
 									},
 									{
@@ -152,88 +165,78 @@
 											"type": "DateTime"
 										},
 										"sink": {
-											"type": "String",
-											"ordinal": 6
+											"name": "pickup_datetime",
+											"type": "String"
 										}
 									},
 									{
 										"source": {
-											"name": "dropoff_datetime",
-											"type": "DateTime"
-										},
-										"sink": {
-											"type": "String",
-											"ordinal": 7
-										}
-									},
-									{
-										"source": {
-											"name": "passenger_count",
+											"name": "payment_type",
 											"type": "String"
 										},
 										"sink": {
-											"type": "String",
-											"ordinal": 8
-										}
-									},
-									{
-										"source": {
-											"name": "trip_time_in_secs",
+											"name": "payment_type",
 											"type": "String"
-										},
-										"sink": {
-											"type": "String",
-											"ordinal": 9
 										}
 									},
 									{
 										"source": {
-											"name": "trip_distance",
+											"name": "fare_amount",
 											"type": "Double"
 										},
 										"sink": {
-											"type": "String",
-											"ordinal": 10
+											"name": "fare_amount",
+											"type": "String"
 										}
 									},
 									{
 										"source": {
-											"name": "pickup_longitude",
+											"name": "surcharge",
 											"type": "String"
 										},
 										"sink": {
-											"type": "String",
-											"ordinal": 11
+											"name": "surcharge",
+											"type": "String"
 										}
 									},
 									{
 										"source": {
-											"name": "pickup_latitude",
-											"type": "String"
+											"name": "mta_tax",
+											"type": "Double"
 										},
 										"sink": {
-											"type": "String",
-											"ordinal": 12
+											"name": "mta_tax",
+											"type": "String"
 										}
 									},
 									{
 										"source": {
-											"name": "dropoff_longitude",
+											"name": "tip_amount",
 											"type": "String"
 										},
 										"sink": {
-											"type": "String",
-											"ordinal": 13
+											"name": "tip_amount",
+											"type": "String"
 										}
 									},
 									{
 										"source": {
-											"name": "dropoff_latitude",
+											"name": "tolls_amount",
 											"type": "String"
 										},
 										"sink": {
-											"type": "String",
-											"ordinal": 14
+											"name": "tolls_amount",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "total_amount",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "total_amount",
+											"type": "String"
 										}
 									}
 								]
@@ -260,39 +263,6 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/datasets/SourceDataset_zcj')]",
 				"[concat(variables('workspaceId'), '/datasets/DestinationDataset_zcj')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/NotebookPipeline1')]",
-			"type": "Microsoft.Synapse/workspaces/pipelines",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"activities": [
-					{
-						"name": "Notebook1",
-						"type": "SynapseNotebook",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebook": {
-								"referenceName": "Data Exploration and ML Modeling - NYC taxi predict using Spark MLlib",
-								"type": "NotebookReference"
-							},
-							"snapshot": true
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/notebooks/Data Exploration and ML Modeling - NYC taxi predict using Spark MLlib')]"
 			]
 		},
 		{
@@ -616,6 +586,7 @@
 				"[concat(variables('workspaceId'), '/datasets/faresDataSource')]",
 				"[concat(variables('workspaceId'), '/datasets/faresDataSink')]",
 				"[concat(variables('workspaceId'), '/dataflows/tripFaresDataTransformations')]",
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]",
 				"[concat(variables('workspaceId'), '/datasets/azureSynapseAnalyticsSchema')]"
 			]
 		},
@@ -708,6 +679,7 @@
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": []
@@ -741,56 +713,45 @@
 						"type": "nvarchar"
 					},
 					{
-						"name": "rate_code",
-						"type": "nvarchar"
-					},
-					{
-						"name": "store_and_fwd_flag",
-						"type": "nvarchar"
-					},
-					{
 						"name": "pickup_datetime",
 						"type": "datetime2",
 						"scale": 7
 					},
 					{
-						"name": "dropoff_datetime",
-						"type": "datetime2",
-						"scale": 7
-					},
-					{
-						"name": "passenger_count",
+						"name": "payment_type",
 						"type": "nvarchar"
 					},
 					{
-						"name": "trip_time_in_secs",
-						"type": "nvarchar"
-					},
-					{
-						"name": "trip_distance",
+						"name": "fare_amount",
 						"type": "float",
 						"precision": 15
 					},
 					{
-						"name": "pickup_longitude",
+						"name": "surcharge",
 						"type": "nvarchar"
 					},
 					{
-						"name": "pickup_latitude",
+						"name": "mta_tax",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "tip_amount",
 						"type": "nvarchar"
 					},
 					{
-						"name": "dropoff_longitude",
+						"name": "tolls_amount",
 						"type": "nvarchar"
 					},
 					{
-						"name": "dropoff_latitude",
-						"type": "nvarchar"
+						"name": "total_amount",
+						"type": "float",
+						"precision": 15
 					}
 				],
 				"typeProperties": {
 					"schema": "dbo",
-					"table": "trip-data"
+					"table": "fares-data"
 				}
 			},
 			"dependsOn": [
@@ -1535,6 +1496,26 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Querying_trip_data_from_ADLS_rawdata_refined')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/refined/dbo.trip-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'    \n    ) \nWITH\n    (\n    [medallion] [nvarchar](50),\n\t[hack_license] [nvarchar](50),\n\t[vendor_id] [nvarchar](50),\n\t[rate_code] [nvarchar](50),\n\t[store_and_fwd_flag] [nvarchar](50),\n\t[pickup_datetime] [datetime2](7),\n\t[dropoff_datetime] [datetime2](7),\n\t[passenger_count] [nvarchar](50),\n\t[trip_time_in_secs] [nvarchar](50),\n\t[trip_distance] [float],\n\t[pickup_longitude] [nvarchar](50),\n\t[pickup_latitude] [nvarchar](50),\n\t[dropoff_longitude] [nvarchar](50),\n\t[dropoff_latitude] [nvarchar](50) \n\n    ) AS [result];\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "master"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/create external table trip')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -2100,26 +2081,6 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/managedVirtualNetworks/default')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Querying_trip_data_from_ADLS_rawdata_refined')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/refined/dbo.trip-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'    \n    ) \nWITH\n    (\n    [medallion] [nvarchar](50),\n\t[hack_license] [nvarchar](50),\n\t[vendor_id] [nvarchar](50),\n\t[rate_code] [nvarchar](50),\n\t[store_and_fwd_flag] [nvarchar](50),\n\t[pickup_datetime] [datetime2](7),\n\t[dropoff_datetime] [datetime2](7),\n\t[passenger_count] [nvarchar](50),\n\t[trip_time_in_secs] [nvarchar](50),\n\t[trip_distance] [float],\n\t[pickup_longitude] [nvarchar](50),\n\t[pickup_latitude] [nvarchar](50),\n\t[dropoff_longitude] [nvarchar](50),\n\t[dropoff_latitude] [nvarchar](50) \n\n    ) AS [result];\n",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"poolName": "Built-in",
-						"databaseName": "master"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
 		}
 	]
 }
