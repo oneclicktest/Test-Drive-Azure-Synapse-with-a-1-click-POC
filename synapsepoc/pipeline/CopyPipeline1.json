@@ -1,9 +1,9 @@
 {
-	"name": "CopyPipeline_for_poc",
+	"name": "CopyPipeline1",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy_zcj",
+				"name": "Copy_from_prem_sql_server",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
