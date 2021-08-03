@@ -673,9 +673,9 @@
 											"physicalType": "nvarchar"
 										},
 										"sink": {
+											"name": "medallion",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 1
+											"physicalType": "String"
 										}
 									},
 									{
@@ -685,9 +685,9 @@
 											"physicalType": "nvarchar"
 										},
 										"sink": {
+											"name": "hack_license",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 2
+											"physicalType": "String"
 										}
 									},
 									{
@@ -697,9 +697,9 @@
 											"physicalType": "nvarchar"
 										},
 										"sink": {
+											"name": "vendor_id",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 3
+											"physicalType": "String"
 										}
 									},
 									{
@@ -709,9 +709,9 @@
 											"physicalType": "datetime2"
 										},
 										"sink": {
+											"name": "pickup_datetime",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 4
+											"physicalType": "String"
 										}
 									},
 									{
@@ -721,9 +721,9 @@
 											"physicalType": "nvarchar"
 										},
 										"sink": {
+											"name": "payment_type",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 5
+											"physicalType": "String"
 										}
 									},
 									{
@@ -733,9 +733,9 @@
 											"physicalType": "float"
 										},
 										"sink": {
+											"name": "fare_amount",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 6
+											"physicalType": "String"
 										}
 									},
 									{
@@ -745,9 +745,9 @@
 											"physicalType": "nvarchar"
 										},
 										"sink": {
+											"name": "surcharge",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 7
+											"physicalType": "String"
 										}
 									},
 									{
@@ -757,9 +757,9 @@
 											"physicalType": "float"
 										},
 										"sink": {
+											"name": "mta_tax",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 8
+											"physicalType": "String"
 										}
 									},
 									{
@@ -769,9 +769,9 @@
 											"physicalType": "nvarchar"
 										},
 										"sink": {
+											"name": "tip_amount",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 9
+											"physicalType": "String"
 										}
 									},
 									{
@@ -781,9 +781,9 @@
 											"physicalType": "nvarchar"
 										},
 										"sink": {
+											"name": "tolls_amount",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 10
+											"physicalType": "String"
 										}
 									},
 									{
@@ -793,9 +793,9 @@
 											"physicalType": "float"
 										},
 										"sink": {
+											"name": "total_amount",
 											"type": "String",
-											"physicalType": "String",
-											"ordinal": 11
+											"physicalType": "String"
 										}
 									}
 								],
@@ -917,6 +917,7 @@
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": [
@@ -1892,7 +1893,7 @@
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "CREATE EXTERNAL FILE FORMAT [trip_csv_file_format]\nWITH (FORMAT_TYPE = DELIMITEDTEXT)\n\n\nCREATE EXTERNAL DATA SOURCE trip_data_source_adls_refined\nWITH ( LOCATION = 'https://ajmnugiqxczz6x2poc.blob.core.windows.net/rawdata')\n\n--DROP EXTERNAL TABLE [dbo].[trip_data]\n\nCREATE EXTERNAL TABLE [dbo].[trip_data]\n(\n\t[medallion] [nvarchar](50) ,\n\t[hack_license] [nvarchar](50),\n\t[vendor_id] [nvarchar](50),\n\t[rate_code] [nvarchar](50),\n\t[store_and_fwd_flag] [nvarchar](50),\n\t[pickup_datetime] [datetime2](7),\n\t[dropoff_datetime] [datetime2](7),\n\t[passenger_count] [nvarchar](50),\n\t[trip_time_in_secs] [nvarchar](50),\n\t[trip_distance] [float],\n\t[pickup_longitude] [nvarchar](50),\n\t[pickup_latitude] [nvarchar](50),\n\t[dropoff_longitude] [nvarchar](50),\n\t[dropoff_latitude] [nvarchar](50)\n)\nWITH\n(\n\tLOCATION = '/refined/dbo.trip-data.csv',\n\tDATA_SOURCE = [trip_data_source_adls_refined],\n\tFILE_FORMAT = [trip_csv_file_format]\n)\n\nSELECT TOP 1 * FROM [trip_data]",
+					"query": "-- DROP EXTERNAL FILE FORMAT [trip_csv_file_format]\n-- GO\nCREATE EXTERNAL FILE FORMAT [trip_csv_file_format]\nWITH (FORMAT_TYPE = DELIMITEDTEXT)\n\n--DROP EXTERNAL DATA SOURCE trip_data_source_adls_refined\n--GO\nCREATE EXTERNAL DATA SOURCE trip_data_source_adls_refined\nWITH (LOCATION = 'https://ajmnugiqxczz6x2poc.blob.core.windows.net/rawdata')\n\n-- DROP EXTERNAL TABLE [dbo].[trip_data]\n\nCREATE EXTERNAL TABLE [dbo].[trip_data]\n(\n\t[medallion] [nvarchar](50) ,\n\t[hack_license] [nvarchar](50),\n\t[vendor_id] [nvarchar](50),\n\t[rate_code] [nvarchar](50),\n\t[store_and_fwd_flag] [nvarchar](50),\n\t[pickup_datetime] [datetime2](7),\n\t[dropoff_datetime] [datetime2](7),\n\t[passenger_count] [nvarchar](50),\n\t[trip_time_in_secs] [nvarchar](50),\n\t[trip_distance] [float],\n\t[pickup_longitude] [nvarchar](50),\n\t[pickup_latitude] [nvarchar](50),\n\t[dropoff_longitude] [nvarchar](50),\n\t[dropoff_latitude] [nvarchar](50)\n)\nWITH\n(\n\tLOCATION = '/rawdata/dbo.trip-data.csv',\n\tDATA_SOURCE = [trip_data_source_adls_refined],\n\tFILE_FORMAT = [trip_csv_file_format]\n)\n\nSELECT TOP 10 * FROM [dbo].[trip_data]",
 					"metadata": {
 						"language": "sql"
 					},
@@ -1987,6 +1988,46 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT TOP (100) [medallion]\n,[hack_license]\n,[vendor_id]\n,[rate_code]\n,[store_and_fwd_flag]\n,[pickup_datetime]\n,[dropoff_datetime]\n,[passenger_count]\n,[trip_time_in_secs]\n,[trip_distance]\n,[pickup_longitude]\n,[pickup_latitude]\n,[dropoff_longitude]\n,[dropoff_latitude]\n FROM [dbo].[trip_data]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "AC_Transport_serverlessDB"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 2')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/dbo.fares-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0',\n        HEADER_ROW = TRUE\n    ) AS [result]\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "master"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/create external table trip')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -1999,6 +2040,46 @@
 					"currentConnection": {
 						"poolName": "Built-in",
 						"databaseName": "master"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/vw_fares_data_AC_Transit')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS vwfares_data;\nGO\n\nCREATE VIEW vwfares_data AS\nSELECT\n    *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/dbo.fares-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'\n    ) AS [result]\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "AC_Transport_serverlessDB"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/vw_trip_data_AC_Transit_serverlessDB')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS dbo.vwtrip_data;\nGO\n\nCREATE VIEW vwtrip_data AS\nSELECT\n     *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/dbo.trip-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0',\n        HEADER_ROW = TRUE\n    ) AS [result]\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "AC_Transport_serverlessDB"
 					},
 					"resultLimit": 5000
 				},
@@ -2552,46 +2633,6 @@
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/managedVirtualNetworks/default')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/vw_fares_data_AC_Transit')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS vwfares_data;\nGO\n\nCREATE VIEW vwfares_data AS\nSELECT\n    *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/dbo.fares-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'\n    ) AS [result]\n",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"poolName": "Built-in",
-						"databaseName": "AC_Transport_serverlessDB"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/vw_trip_data_AC_Transit_serverlessDB')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS dbo.vwtrip_data;\nGO\n\nCREATE VIEW vwtrip_data AS\nSELECT\n     *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/dbo.trip-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0',\n        HEADER_ROW = TRUE\n    ) AS [result]\n",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"poolName": "Built-in",
-						"databaseName": "AC_Transport_serverlessDB"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
 		}
 	]
 }
