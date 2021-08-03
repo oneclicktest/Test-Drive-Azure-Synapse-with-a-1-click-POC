@@ -1,5 +1,5 @@
 {
-	"name": "count_yeelow_taxi_rows",
+	"name": "count_yellow_taxi_rows",
 	"properties": {
 		"content": {
 			"query": "-- This is auto-generated code\nSELECT\n    count(*) row_count\nFROM\n    OPENROWSET(\n        BULK     'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT = 'parquet'\n    ) AS [result];",
