@@ -14,6 +14,9 @@
 		"ls_gen2AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"ls_adls_gen2_rawdata_accountKey": {
+			"value": ""
+		},
 		"HttpServerTripDataLinkedService_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com/Azure/Test-Drive-Azure-Synapse-with-a-1-click-POC/main/tripDataAndFaresCSV/trip-data.csv"
 		},
@@ -31,6 +34,9 @@
 		},
 		"nyc_tlc_yellow_sasUri": {
 			"value": ""
+		},
+		"ls_adls_gen2_rawdata_properties_typeProperties_url": {
+			"value": "https://ajmnugiqxczz6x2poc.dfs.core.windows.net"
 		}
 	}
 }
