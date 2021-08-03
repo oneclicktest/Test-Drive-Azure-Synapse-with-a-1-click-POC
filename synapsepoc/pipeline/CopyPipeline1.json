@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy_from_prem_sql_server",
+				"name": "Copy_from_onprem_sql_server",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
