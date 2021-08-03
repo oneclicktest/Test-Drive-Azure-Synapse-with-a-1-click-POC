@@ -15,13 +15,13 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'TripFaresSynapseAnalyticsLinkedService'"
 		},
-		"ls_gen2AzureDataLakeStorage1_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'ls_gen2AzureDataLakeStorage1'"
-		},
 		"ls_adls_gen2_rawdata_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_adls_gen2_rawdata'"
+		},
+		"ls_gen2AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_gen2AzureDataLakeStorage1'"
 		},
 		"HttpServerTripDataLinkedService_properties_typeProperties_url": {
 			"type": "string",
@@ -39,6 +39,10 @@
 			"type": "string",
 			"defaultValue": "@{concat('https://',linkedService().keyVaultName,'.vault.azure.net/')}"
 		},
+		"ls_adls_gen2_rawdata_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://ajmnugiqxczz6x2poc.dfs.core.windows.net"
+		},
 		"ls_gen2AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://ajmnugiqxczz6x2poc.dfs.core.windows.net"
@@ -46,10 +50,6 @@
 		"nyc_tlc_yellow_sasUri": {
 			"type": "secureString",
 			"metadata": "Secure string for 'sasUri' of 'nyc_tlc_yellow'"
-		},
-		"ls_adls_gen2_rawdata_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://ajmnugiqxczz6x2poc.dfs.core.windows.net"
 		}
 	},
 	"variables": {
@@ -628,6 +628,208 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/copy_fare_pipeline')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "copy-fares-datacsv",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".csv"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "medallion",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 1
+										}
+									},
+									{
+										"source": {
+											"name": "hack_license",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 2
+										}
+									},
+									{
+										"source": {
+											"name": "vendor_id",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 3
+										}
+									},
+									{
+										"source": {
+											"name": "pickup_datetime",
+											"type": "DateTime",
+											"physicalType": "datetime2"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 4
+										}
+									},
+									{
+										"source": {
+											"name": "payment_type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 5
+										}
+									},
+									{
+										"source": {
+											"name": "fare_amount",
+											"type": "Double",
+											"physicalType": "float"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 6
+										}
+									},
+									{
+										"source": {
+											"name": "surcharge",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 7
+										}
+									},
+									{
+										"source": {
+											"name": "mta_tax",
+											"type": "Double",
+											"physicalType": "float"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 8
+										}
+									},
+									{
+										"source": {
+											"name": "tip_amount",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 9
+										}
+									},
+									{
+										"source": {
+											"name": "tolls_amount",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 10
+										}
+									},
+									{
+										"source": {
+											"name": "total_amount",
+											"type": "Double",
+											"physicalType": "float"
+										},
+										"sink": {
+											"type": "String",
+											"physicalType": "String",
+											"ordinal": 11
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "dataset_sqlserver_table",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "Dataset_adls_gen2_rawdata",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/dataset_sqlserver_table')]",
+				"[concat(variables('workspaceId'), '/datasets/Dataset_adls_gen2_rawdata')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Dataset')]",
 			"type": "Microsoft.Synapse/workspaces/datasets",
 			"apiVersion": "2019-06-01-preview",
@@ -695,6 +897,75 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/ls_gen2AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Dataset_adls_gen2_rawdata')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_adls_gen2_rawdata",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "rawdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/ls_adls_gen2_rawdata')]"
 			]
 		},
 		{
@@ -918,6 +1189,76 @@
 			},
 			"dependsOn": [
 				"[concat(variables('workspaceId'), '/linkedServices/TripFaresSynapseAnalyticsLinkedService')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/dataset_sqlserver_table')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LSV2_SqlServer1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "medallion",
+						"type": "nvarchar"
+					},
+					{
+						"name": "hack_license",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vendor_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "pickup_datetime",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "payment_type",
+						"type": "nvarchar"
+					},
+					{
+						"name": "fare_amount",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "surcharge",
+						"type": "nvarchar"
+					},
+					{
+						"name": "mta_tax",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "tip_amount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "tolls_amount",
+						"type": "nvarchar"
+					},
+					{
+						"name": "total_amount",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "fares-data"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/LSV2_SqlServer1')]"
 			]
 		},
 		{
@@ -1350,6 +1691,29 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/ls_adls_gen2_rawdata')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_adls_gen2_rawdata_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_adls_gen2_rawdata_accountKey')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/ls_gen2AzureDataLakeStorage1')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -1523,12 +1887,72 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/Create_external_table_in_ac_transit_serverless')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE EXTERNAL FILE FORMAT [trip_csv_file_format]\nWITH (FORMAT_TYPE = DELIMITEDTEXT)\n\n\nCREATE EXTERNAL DATA SOURCE trip_data_source_adls_refined\nWITH ( LOCATION = 'https://ajmnugiqxczz6x2poc.blob.core.windows.net/rawdata')\n\n--DROP EXTERNAL TABLE [dbo].[trip_data]\n\nCREATE EXTERNAL TABLE [dbo].[trip_data]\n(\n\t[medallion] [nvarchar](50) ,\n\t[hack_license] [nvarchar](50),\n\t[vendor_id] [nvarchar](50),\n\t[rate_code] [nvarchar](50),\n\t[store_and_fwd_flag] [nvarchar](50),\n\t[pickup_datetime] [datetime2](7),\n\t[dropoff_datetime] [datetime2](7),\n\t[passenger_count] [nvarchar](50),\n\t[trip_time_in_secs] [nvarchar](50),\n\t[trip_distance] [float],\n\t[pickup_longitude] [nvarchar](50),\n\t[pickup_latitude] [nvarchar](50),\n\t[dropoff_longitude] [nvarchar](50),\n\t[dropoff_latitude] [nvarchar](50)\n)\nWITH\n(\n\tLOCATION = '/refined/dbo.trip-data.csv',\n\tDATA_SOURCE = [trip_data_source_adls_refined],\n\tFILE_FORMAT = [trip_csv_file_format]\n)\n\nSELECT TOP 1 * FROM [trip_data]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "AC_Transport_serverlessDB"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Create_vw_trip_data_serverless_AC_Transport')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS vw_trip_data;\nGO\n\nCREATE VIEW vwtrip_data AS\nSELECT\n    *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/refined/dbo.trip-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'\n    ) AS [result]\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "AC_Transport_serverlessDB"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/Querying_fare_data_adls_refined')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
 					"query": "SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/refined/dbo.fares-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0',\n        HEADER_ROW = TRUE\n    ) AS [result]\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "master"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Querying_trip_data__ADLS_refined')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/refined/dbo.trip-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'    \n    ) \nWITH\n    (\n    [medallion] [nvarchar](50),\n\t[hack_license] [nvarchar](50),\n\t[vendor_id] [nvarchar](50),\n\t[rate_code] [nvarchar](50),\n\t[store_and_fwd_flag] [nvarchar](50),\n\t[pickup_datetime] [datetime2](7),\n\t[dropoff_datetime] [datetime2](7),\n\t[passenger_count] [nvarchar](50),\n\t[trip_time_in_secs] [nvarchar](50),\n\t[trip_distance] [float],\n\t[pickup_longitude] [nvarchar](50),\n\t[pickup_latitude] [nvarchar](50),\n\t[dropoff_longitude] [nvarchar](50),\n\t[dropoff_latitude] [nvarchar](50) \n\n    ) AS [result];\n",
 					"metadata": {
 						"language": "sql"
 					},
@@ -1555,26 +1979,6 @@
 					"currentConnection": {
 						"poolName": "Built-in",
 						"databaseName": "default"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Querying_trip_data__ADLS_refined')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/refined/dbo.trip-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'    \n    ) \nWITH\n    (\n    [medallion] [nvarchar](50),\n\t[hack_license] [nvarchar](50),\n\t[vendor_id] [nvarchar](50),\n\t[rate_code] [nvarchar](50),\n\t[store_and_fwd_flag] [nvarchar](50),\n\t[pickup_datetime] [datetime2](7),\n\t[dropoff_datetime] [datetime2](7),\n\t[passenger_count] [nvarchar](50),\n\t[trip_time_in_secs] [nvarchar](50),\n\t[trip_distance] [float],\n\t[pickup_longitude] [nvarchar](50),\n\t[pickup_latitude] [nvarchar](50),\n\t[dropoff_longitude] [nvarchar](50),\n\t[dropoff_latitude] [nvarchar](50) \n\n    ) AS [result];\n",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"poolName": "Built-in",
-						"databaseName": "master"
 					},
 					"resultLimit": 5000
 				},
@@ -2150,12 +2554,12 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/Create_external_table_in_ac_transit_serverless')]",
+			"name": "[concat(parameters('workspaceName'), '/vw_trip_data_AC_Transit')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "CREATE EXTERNAL FILE FORMAT [trip_csv_file_format]\nWITH (FORMAT_TYPE = DELIMITEDTEXT)\n\n\nCREATE EXTERNAL DATA SOURCE trip_data_source_adls_refined\nWITH ( LOCATION = 'https://ajmnugiqxczz6x2poc.blob.core.windows.net/rawdata')\n\n--DROP EXTERNAL TABLE [dbo].[trip_data]\n\nCREATE EXTERNAL TABLE [dbo].[trip_data]\n(\n\t[medallion] [nvarchar](50) ,\n\t[hack_license] [nvarchar](50),\n\t[vendor_id] [nvarchar](50),\n\t[rate_code] [nvarchar](50),\n\t[store_and_fwd_flag] [nvarchar](50),\n\t[pickup_datetime] [datetime2](7),\n\t[dropoff_datetime] [datetime2](7),\n\t[passenger_count] [nvarchar](50),\n\t[trip_time_in_secs] [nvarchar](50),\n\t[trip_distance] [float],\n\t[pickup_longitude] [nvarchar](50),\n\t[pickup_latitude] [nvarchar](50),\n\t[dropoff_longitude] [nvarchar](50),\n\t[dropoff_latitude] [nvarchar](50)\n)\nWITH\n(\n\tLOCATION = '/refined/dbo.trip-data.csv',\n\tDATA_SOURCE = [trip_data_source_adls_refined],\n\tFILE_FORMAT = [trip_csv_file_format]\n)\n\nSELECT TOP 1 * FROM [trip_data]",
+					"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS vw_trip_data;\nGO\n\nCREATE VIEW vwtrip_data AS\nSELECT\n    *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/dbo.fares-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'\n    ) AS [result]\n",
 					"metadata": {
 						"language": "sql"
 					},
@@ -2168,390 +2572,6 @@
 				"type": "SqlQuery"
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Create_vw_trip_data_serverless_AC_Transport')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS vw_trip_data;\nGO\n\nCREATE VIEW vwtrip_data AS\nSELECT\n    *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/refined/dbo.trip-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'\n    ) AS [result]\n",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"poolName": "Built-in",
-						"databaseName": "AC_Transport_serverlessDB"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/copy_fare_pipeline')]",
-			"type": "Microsoft.Synapse/workspaces/pipelines",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"activities": [
-					{
-						"name": "copy-fares-datacsv",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "SqlServerSource",
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".csv"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"mappings": [
-									{
-										"source": {
-											"name": "medallion",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 1
-										}
-									},
-									{
-										"source": {
-											"name": "hack_license",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 2
-										}
-									},
-									{
-										"source": {
-											"name": "vendor_id",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 3
-										}
-									},
-									{
-										"source": {
-											"name": "pickup_datetime",
-											"type": "DateTime",
-											"physicalType": "datetime2"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 4
-										}
-									},
-									{
-										"source": {
-											"name": "payment_type",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 5
-										}
-									},
-									{
-										"source": {
-											"name": "fare_amount",
-											"type": "Double",
-											"physicalType": "float"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 6
-										}
-									},
-									{
-										"source": {
-											"name": "surcharge",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 7
-										}
-									},
-									{
-										"source": {
-											"name": "mta_tax",
-											"type": "Double",
-											"physicalType": "float"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 8
-										}
-									},
-									{
-										"source": {
-											"name": "tip_amount",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 9
-										}
-									},
-									{
-										"source": {
-											"name": "tolls_amount",
-											"type": "String",
-											"physicalType": "nvarchar"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 10
-										}
-									},
-									{
-										"source": {
-											"name": "total_amount",
-											"type": "Double",
-											"physicalType": "float"
-										},
-										"sink": {
-											"type": "String",
-											"physicalType": "String",
-											"ordinal": 11
-										}
-									}
-								],
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "dataset_sqlserver_table",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "Dataset_adls_gen2_rawdata",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/datasets/dataset_sqlserver_table')]",
-				"[concat(variables('workspaceId'), '/datasets/Dataset_adls_gen2_rawdata')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/dataset_sqlserver_table')]",
-			"type": "Microsoft.Synapse/workspaces/datasets",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LSV2_SqlServer1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "SqlServerTable",
-				"schema": [
-					{
-						"name": "medallion",
-						"type": "nvarchar"
-					},
-					{
-						"name": "hack_license",
-						"type": "nvarchar"
-					},
-					{
-						"name": "vendor_id",
-						"type": "nvarchar"
-					},
-					{
-						"name": "pickup_datetime",
-						"type": "datetime2",
-						"scale": 7
-					},
-					{
-						"name": "payment_type",
-						"type": "nvarchar"
-					},
-					{
-						"name": "fare_amount",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "surcharge",
-						"type": "nvarchar"
-					},
-					{
-						"name": "mta_tax",
-						"type": "float",
-						"precision": 15
-					},
-					{
-						"name": "tip_amount",
-						"type": "nvarchar"
-					},
-					{
-						"name": "tolls_amount",
-						"type": "nvarchar"
-					},
-					{
-						"name": "total_amount",
-						"type": "float",
-						"precision": 15
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "fares-data"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/LSV2_SqlServer1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/ls_adls_gen2_rawdata')]",
-			"type": "Microsoft.Synapse/workspaces/linkedServices",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('ls_adls_gen2_rawdata_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('ls_adls_gen2_rawdata_accountKey')]"
-					}
-				},
-				"connectVia": {
-					"referenceName": "AutoResolveIntegrationRuntime",
-					"type": "IntegrationRuntimeReference"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Dataset_adls_gen2_rawdata')]",
-			"type": "Microsoft.Synapse/workspaces/datasets",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_adls_gen2_rawdata",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "rawdata"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					},
-					{
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/linkedServices/ls_adls_gen2_rawdata')]"
-			]
 		}
 	]
 }

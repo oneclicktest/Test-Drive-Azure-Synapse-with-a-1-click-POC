@@ -11,10 +11,10 @@
 		"TripFaresSynapseAnalyticsLinkedService_connectionString": {
 			"value": ""
 		},
-		"ls_gen2AzureDataLakeStorage1_accountKey": {
+		"ls_adls_gen2_rawdata_accountKey": {
 			"value": ""
 		},
-		"ls_adls_gen2_rawdata_accountKey": {
+		"ls_gen2AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
 		"HttpServerTripDataLinkedService_properties_typeProperties_url": {
@@ -29,14 +29,14 @@
 		"keyVaultLinkedservice_properties_typeProperties_baseUrl": {
 			"value": "@{concat('https://',linkedService().keyVaultName,'.vault.azure.net/')}"
 		},
+		"ls_adls_gen2_rawdata_properties_typeProperties_url": {
+			"value": "https://ajmnugiqxczz6x2poc.dfs.core.windows.net"
+		},
 		"ls_gen2AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://ajmnugiqxczz6x2poc.dfs.core.windows.net"
 		},
 		"nyc_tlc_yellow_sasUri": {
 			"value": ""
-		},
-		"ls_adls_gen2_rawdata_properties_typeProperties_url": {
-			"value": "https://ajmnugiqxczz6x2poc.dfs.core.windows.net"
 		}
 	}
 }
