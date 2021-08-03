@@ -1968,6 +1968,26 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT TOP (100) [vendorID]\n,[tpepPickupDateTime]\n,[tpepDropoffDateTime]\n,[passengerCount]\n,[tripDistance]\n,[puLocationId]\n,[doLocationId]\n,[startLon]\n,[startLat]\n,[endLon]\n,[endLat]\n,[rateCodeId]\n,[storeAndFwdFlag]\n,[paymentType]\n,[fareAmount]\n,[extra]\n,[mtaTax]\n,[improvementSurcharge]\n,[tipAmount]\n,[tollsAmount]\n,[totalAmount]\n FROM [dbo].[nyc_yellow_taxi]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "serverlessv2"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/vw_fares_data_AC_Transit')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
@@ -2555,18 +2575,18 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"name": "[concat(parameters('workspaceName'), '/count_yeelow_taxi_rows')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "SELECT TOP (100) [vendorID]\n,[tpepPickupDateTime]\n,[tpepDropoffDateTime]\n,[passengerCount]\n,[tripDistance]\n,[puLocationId]\n,[doLocationId]\n,[startLon]\n,[startLat]\n,[endLon]\n,[endLat]\n,[rateCodeId]\n,[storeAndFwdFlag]\n,[paymentType]\n,[fareAmount]\n,[extra]\n,[mtaTax]\n,[improvementSurcharge]\n,[tipAmount]\n,[tollsAmount]\n,[totalAmount]\n FROM [dbo].[nyc_yellow_taxi]",
+					"query": "-- This is auto-generated code\nSELECT\n    count(*) row_count\nFROM\n    OPENROWSET(\n        BULK     'https://azureopendatastorage.blob.core.windows.net/nyctlc/yellow/puYear=*/puMonth=*/*.parquet',\n        FORMAT = 'parquet'\n    ) AS [result];",
 					"metadata": {
 						"language": "sql"
 					},
 					"currentConnection": {
 						"poolName": "Built-in",
-						"databaseName": "serverlessv2"
+						"databaseName": "master"
 					},
 					"resultLimit": 5000
 				},
