@@ -76,6 +76,26 @@
 							},
 							{
 								"source": {
+									"name": "rate_code",
+									"type": "String"
+								},
+								"sink": {
+									"name": "rate_code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "store_and_fwd_flag",
+									"type": "String"
+								},
+								"sink": {
+									"name": "store_and_fwd_flag",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
 									"name": "pickup_datetime",
 									"type": "DateTime"
 								},
@@ -86,71 +106,81 @@
 							},
 							{
 								"source": {
-									"name": "payment_type",
-									"type": "String"
+									"name": "dropoff_datetime",
+									"type": "DateTime"
 								},
 								"sink": {
-									"name": "payment_type",
+									"name": "dropoff_datetime",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "fare_amount",
+									"name": "passenger_count",
+									"type": "String"
+								},
+								"sink": {
+									"name": "passenger_count",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "trip_time_in_secs",
+									"type": "String"
+								},
+								"sink": {
+									"name": "trip_time_in_secs",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "trip_distance",
 									"type": "Double"
 								},
 								"sink": {
-									"name": "fare_amount",
+									"name": "trip_distance",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "surcharge",
+									"name": "pickup_longitude",
 									"type": "String"
 								},
 								"sink": {
-									"name": "surcharge",
+									"name": "pickup_longitude",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "mta_tax",
-									"type": "Double"
+									"name": "pickup_latitude",
+									"type": "String"
 								},
 								"sink": {
-									"name": "mta_tax",
+									"name": "pickup_latitude",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "tip_amount",
+									"name": "dropoff_longitude",
 									"type": "String"
 								},
 								"sink": {
-									"name": "tip_amount",
+									"name": "dropoff_longitude",
 									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "tolls_amount",
+									"name": "dropoff_latitude",
 									"type": "String"
 								},
 								"sink": {
-									"name": "tolls_amount",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "total_amount",
-									"type": "Double"
-								},
-								"sink": {
-									"name": "total_amount",
+									"name": "dropoff_latitude",
 									"type": "String"
 								}
 							}
