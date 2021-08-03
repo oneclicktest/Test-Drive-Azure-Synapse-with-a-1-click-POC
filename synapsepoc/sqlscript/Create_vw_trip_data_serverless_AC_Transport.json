@@ -1,0 +1,17 @@
+{
+	"name": "Create_vw_trip_data_serverless_AC_Transport",
+	"properties": {
+		"content": {
+			"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS vw_trip_data;\nGO\n\nCREATE VIEW vwtrip_data AS\nSELECT\n    *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/refined/dbo.trip-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'\n    ) AS [result]\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"poolName": "Built-in",
+				"databaseName": "AC_Transport_serverlessDB"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
