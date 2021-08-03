@@ -21,56 +21,45 @@
 				"type": "nvarchar"
 			},
 			{
-				"name": "rate_code",
-				"type": "nvarchar"
-			},
-			{
-				"name": "store_and_fwd_flag",
-				"type": "nvarchar"
-			},
-			{
 				"name": "pickup_datetime",
 				"type": "datetime2",
 				"scale": 7
 			},
 			{
-				"name": "dropoff_datetime",
-				"type": "datetime2",
-				"scale": 7
-			},
-			{
-				"name": "passenger_count",
+				"name": "payment_type",
 				"type": "nvarchar"
 			},
 			{
-				"name": "trip_time_in_secs",
-				"type": "nvarchar"
-			},
-			{
-				"name": "trip_distance",
+				"name": "fare_amount",
 				"type": "float",
 				"precision": 15
 			},
 			{
-				"name": "pickup_longitude",
+				"name": "surcharge",
 				"type": "nvarchar"
 			},
 			{
-				"name": "pickup_latitude",
+				"name": "mta_tax",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "tip_amount",
 				"type": "nvarchar"
 			},
 			{
-				"name": "dropoff_longitude",
+				"name": "tolls_amount",
 				"type": "nvarchar"
 			},
 			{
-				"name": "dropoff_latitude",
-				"type": "nvarchar"
+				"name": "total_amount",
+				"type": "float",
+				"precision": 15
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "trip-data"
+			"table": "fares-data"
 		}
 	}
 }

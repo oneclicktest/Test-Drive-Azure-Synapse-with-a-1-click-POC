@@ -1,5 +1,5 @@
 {
-	"name": "CopyPipeline1",
+	"name": "PipelineCopyOnPrem",
 	"properties": {
 		"activities": [
 			{
@@ -50,8 +50,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 1
+									"name": "medallion",
+									"type": "String"
 								}
 							},
 							{
@@ -60,8 +60,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 2
+									"name": "hack_license",
+									"type": "String"
 								}
 							},
 							{
@@ -70,28 +70,8 @@
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 3
-								}
-							},
-							{
-								"source": {
-									"name": "rate_code",
+									"name": "vendor_id",
 									"type": "String"
-								},
-								"sink": {
-									"type": "String",
-									"ordinal": 4
-								}
-							},
-							{
-								"source": {
-									"name": "store_and_fwd_flag",
-									"type": "String"
-								},
-								"sink": {
-									"type": "String",
-									"ordinal": 5
 								}
 							},
 							{
@@ -100,88 +80,78 @@
 									"type": "DateTime"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 6
+									"name": "pickup_datetime",
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "dropoff_datetime",
-									"type": "DateTime"
-								},
-								"sink": {
-									"type": "String",
-									"ordinal": 7
-								}
-							},
-							{
-								"source": {
-									"name": "passenger_count",
+									"name": "payment_type",
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 8
-								}
-							},
-							{
-								"source": {
-									"name": "trip_time_in_secs",
+									"name": "payment_type",
 									"type": "String"
-								},
-								"sink": {
-									"type": "String",
-									"ordinal": 9
 								}
 							},
 							{
 								"source": {
-									"name": "trip_distance",
+									"name": "fare_amount",
 									"type": "Double"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 10
+									"name": "fare_amount",
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "pickup_longitude",
+									"name": "surcharge",
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 11
+									"name": "surcharge",
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "pickup_latitude",
-									"type": "String"
+									"name": "mta_tax",
+									"type": "Double"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 12
+									"name": "mta_tax",
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "dropoff_longitude",
+									"name": "tip_amount",
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 13
+									"name": "tip_amount",
+									"type": "String"
 								}
 							},
 							{
 								"source": {
-									"name": "dropoff_latitude",
+									"name": "tolls_amount",
 									"type": "String"
 								},
 								"sink": {
-									"type": "String",
-									"ordinal": 14
+									"name": "tolls_amount",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "total_amount",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "total_amount",
+									"type": "String"
 								}
 							}
 						]
