@@ -2554,12 +2554,32 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/vw_trip_data_AC_Transit')]",
+			"name": "[concat(parameters('workspaceName'), '/vw_fares_data_AC_Transit')]",
 			"type": "Microsoft.Synapse/workspaces/sqlscripts",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
 				"content": {
-					"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS vw_trip_data;\nGO\n\nCREATE VIEW vwtrip_data AS\nSELECT\n    *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/dbo.fares-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'\n    ) AS [result]\n",
+					"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS vwfares_data;\nGO\n\nCREATE VIEW vwfares_data AS\nSELECT\n    *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/dbo.fares-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0'\n    ) AS [result]\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "AC_Transport_serverlessDB"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/vw_trip_data_AC_Transit_serverlessDB')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "USE AC_Transport_serverlessDB;\nGO\n\nDROP VIEW IF EXISTS dbo.vwtrip_data;\nGO\n\nSELECT\n     *\nFROM\n    OPENROWSET(\n        BULK 'https://ajmnugiqxczz6x2poc.dfs.core.windows.net/rawdata/dbo.trip-data.csv',\n        FORMAT = 'CSV',\n        PARSER_VERSION='2.0',\n        HEADER_ROW = TRUE\n    ) AS [result]\n",
 					"metadata": {
 						"language": "sql"
 					},
