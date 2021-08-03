@@ -42,9 +42,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "medallion",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 1
+									"physicalType": "String"
 								}
 							},
 							{
@@ -54,9 +54,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "hack_license",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 2
+									"physicalType": "String"
 								}
 							},
 							{
@@ -66,9 +66,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "vendor_id",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 3
+									"physicalType": "String"
 								}
 							},
 							{
@@ -78,9 +78,9 @@
 									"physicalType": "datetime2"
 								},
 								"sink": {
+									"name": "pickup_datetime",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 4
+									"physicalType": "String"
 								}
 							},
 							{
@@ -90,9 +90,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "payment_type",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 5
+									"physicalType": "String"
 								}
 							},
 							{
@@ -102,9 +102,9 @@
 									"physicalType": "float"
 								},
 								"sink": {
+									"name": "fare_amount",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 6
+									"physicalType": "String"
 								}
 							},
 							{
@@ -114,9 +114,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "surcharge",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 7
+									"physicalType": "String"
 								}
 							},
 							{
@@ -126,9 +126,9 @@
 									"physicalType": "float"
 								},
 								"sink": {
+									"name": "mta_tax",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 8
+									"physicalType": "String"
 								}
 							},
 							{
@@ -138,9 +138,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "tip_amount",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 9
+									"physicalType": "String"
 								}
 							},
 							{
@@ -150,9 +150,9 @@
 									"physicalType": "nvarchar"
 								},
 								"sink": {
+									"name": "tolls_amount",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 10
+									"physicalType": "String"
 								}
 							},
 							{
@@ -162,9 +162,9 @@
 									"physicalType": "float"
 								},
 								"sink": {
+									"name": "total_amount",
 									"type": "String",
-									"physicalType": "String",
-									"ordinal": 11
+									"physicalType": "String"
 								}
 							}
 						],
