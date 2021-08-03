@@ -40,7 +40,152 @@
 						}
 					},
 					"enableStaging": false,
-					"validateDataConsistency": false
+					"validateDataConsistency": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "medallion",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 1
+								}
+							},
+							{
+								"source": {
+									"name": "hack_license",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 2
+								}
+							},
+							{
+								"source": {
+									"name": "vendor_id",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 3
+								}
+							},
+							{
+								"source": {
+									"name": "rate_code",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 4
+								}
+							},
+							{
+								"source": {
+									"name": "store_and_fwd_flag",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 5
+								}
+							},
+							{
+								"source": {
+									"name": "pickup_datetime",
+									"type": "DateTime"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 6
+								}
+							},
+							{
+								"source": {
+									"name": "dropoff_datetime",
+									"type": "DateTime"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 7
+								}
+							},
+							{
+								"source": {
+									"name": "passenger_count",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 8
+								}
+							},
+							{
+								"source": {
+									"name": "trip_time_in_secs",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 9
+								}
+							},
+							{
+								"source": {
+									"name": "trip_distance",
+									"type": "Double"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 10
+								}
+							},
+							{
+								"source": {
+									"name": "pickup_longitude",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 11
+								}
+							},
+							{
+								"source": {
+									"name": "pickup_latitude",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 12
+								}
+							},
+							{
+								"source": {
+									"name": "dropoff_longitude",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 13
+								}
+							},
+							{
+								"source": {
+									"name": "dropoff_latitude",
+									"type": "String"
+								},
+								"sink": {
+									"type": "String",
+									"ordinal": 14
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
