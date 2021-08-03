@@ -7,9 +7,17 @@
 			"metadata": "Workspace name",
 			"defaultValue": "ajmnugiqxczz6x2pocws1"
 		},
+		"LSV2_SqlServer1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LSV2_SqlServer1'"
+		},
 		"TripFaresSynapseAnalyticsLinkedService_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'TripFaresSynapseAnalyticsLinkedService'"
+		},
+		"ls_gen2AzureDataLakeStorage1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'ls_gen2AzureDataLakeStorage1'"
 		},
 		"HttpServerTripDataLinkedService_properties_typeProperties_url": {
 			"type": "string",
@@ -27,6 +35,10 @@
 			"type": "string",
 			"defaultValue": "@{concat('https://',linkedService().keyVaultName,'.vault.azure.net/')}"
 		},
+		"ls_gen2AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://ajmnugiqxczz6x2poc.dfs.core.windows.net"
+		},
 		"nyc_tlc_yellow_sasUri": {
 			"type": "secureString",
 			"metadata": "Secure string for 'sasUri' of 'nyc_tlc_yellow'"
@@ -36,6 +48,220 @@
 		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/CopyPipeline1')]",
+			"type": "Microsoft.Synapse/workspaces/pipelines",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_from_onprem_sql_server",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "dbo.trip-data"
+							},
+							{
+								"name": "Destination",
+								"value": "independent//"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"validateDataConsistency": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "medallion",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 1
+										}
+									},
+									{
+										"source": {
+											"name": "hack_license",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 2
+										}
+									},
+									{
+										"source": {
+											"name": "vendor_id",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 3
+										}
+									},
+									{
+										"source": {
+											"name": "rate_code",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 4
+										}
+									},
+									{
+										"source": {
+											"name": "store_and_fwd_flag",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 5
+										}
+									},
+									{
+										"source": {
+											"name": "pickup_datetime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 6
+										}
+									},
+									{
+										"source": {
+											"name": "dropoff_datetime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 7
+										}
+									},
+									{
+										"source": {
+											"name": "passenger_count",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 8
+										}
+									},
+									{
+										"source": {
+											"name": "trip_time_in_secs",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 9
+										}
+									},
+									{
+										"source": {
+											"name": "trip_distance",
+											"type": "Double"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 10
+										}
+									},
+									{
+										"source": {
+											"name": "pickup_longitude",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 11
+										}
+									},
+									{
+										"source": {
+											"name": "pickup_latitude",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 12
+										}
+									},
+									{
+										"source": {
+											"name": "dropoff_longitude",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 13
+										}
+									},
+									{
+										"source": {
+											"name": "dropoff_latitude",
+											"type": "String"
+										},
+										"sink": {
+											"type": "String",
+											"ordinal": 14
+										}
+									}
+								]
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SourceDataset_zcj",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DestinationDataset_zcj",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/datasets/SourceDataset_zcj')]",
+				"[concat(variables('workspaceId'), '/datasets/DestinationDataset_zcj')]"
+			]
+		},
 		{
 			"name": "[concat(parameters('workspaceName'), '/TripFaresDataPipeline')]",
 			"type": "Microsoft.Synapse/workspaces/pipelines",
@@ -358,6 +584,113 @@
 				"[concat(variables('workspaceId'), '/datasets/faresDataSink')]",
 				"[concat(variables('workspaceId'), '/dataflows/tripFaresDataTransformations')]",
 				"[concat(variables('workspaceId'), '/datasets/azureSynapseAnalyticsSchema')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/DestinationDataset_zcj')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_gen2AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "rawdata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/ls_gen2AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SourceDataset_zcj')]",
+			"type": "Microsoft.Synapse/workspaces/datasets",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LSV2_SqlServer1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [
+					{
+						"name": "medallion",
+						"type": "nvarchar"
+					},
+					{
+						"name": "hack_license",
+						"type": "nvarchar"
+					},
+					{
+						"name": "vendor_id",
+						"type": "nvarchar"
+					},
+					{
+						"name": "rate_code",
+						"type": "nvarchar"
+					},
+					{
+						"name": "store_and_fwd_flag",
+						"type": "nvarchar"
+					},
+					{
+						"name": "pickup_datetime",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "dropoff_datetime",
+						"type": "datetime2",
+						"scale": 7
+					},
+					{
+						"name": "passenger_count",
+						"type": "nvarchar"
+					},
+					{
+						"name": "trip_time_in_secs",
+						"type": "nvarchar"
+					},
+					{
+						"name": "trip_distance",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "pickup_longitude",
+						"type": "nvarchar"
+					},
+					{
+						"name": "pickup_latitude",
+						"type": "nvarchar"
+					},
+					{
+						"name": "dropoff_longitude",
+						"type": "nvarchar"
+					},
+					{
+						"name": "dropoff_latitude",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "trip-data"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/linkedServices/LSV2_SqlServer1')]"
 			]
 		},
 		{
@@ -778,6 +1111,25 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/LSV2_SqlServer1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('LSV2_SqlServer1_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "SHIntegrationRuntime1",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/SHIntegrationRuntime1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/TripFaresDataLakeStorageLinkedService')]",
 			"type": "Microsoft.Synapse/workspaces/linkedServices",
 			"apiVersion": "2019-06-01-preview",
@@ -886,6 +1238,62 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('workspaceName'), '/ls_gen2AzureDataLakeStorage1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('ls_gen2AzureDataLakeStorage1_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('ls_gen2AzureDataLakeStorage1_accountKey')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/nyc_tlc_yellow')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"sasUri": "[parameters('nyc_tlc_yellow_sasUri')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ScheduleTrigger 1')]",
+			"type": "Microsoft.Synapse/workspaces/triggers",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 15,
+						"startTime": "2021-08-02T23:33:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
 			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
 			"apiVersion": "2019-06-01-preview",
@@ -911,7 +1319,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/selfhostedIntegrationRuntime1')]",
+			"name": "[concat(parameters('workspaceName'), '/SHIntegrationRuntime1')]",
 			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
@@ -979,6 +1387,46 @@
 			"properties": {
 				"type": "ManagedIdentity",
 				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Create external table in serverlessDB')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'nyctlc_azureopendatastorage_blob_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [nyctlc_azureopendatastorage_blob_core_windows_net] \n\tWITH (\n\t\tLOCATION   = 'https://azureopendatastorage.blob.core.windows.net/nyctlc', \n\t)\nGo\n\nCREATE EXTERNAL TABLE nyc_yellow_taxi (\n\t[vendorID] varchar(8000),\n\t[tpepPickupDateTime] datetime2(7),\n\t[tpepDropoffDateTime] datetime2(7),\n\t[passengerCount] int,\n\t[tripDistance] float,\n\t[puLocationId] varchar(8000),\n\t[doLocationId] varchar(8000),\n\t[startLon] float,\n\t[startLat] float,\n\t[endLon] float,\n\t[endLat] float,\n\t[rateCodeId] int,\n\t[storeAndFwdFlag] varchar(8000),\n\t[paymentType] varchar(8000),\n\t[fareAmount] float,\n\t[extra] float,\n\t[mtaTax] float,\n\t[improvementSurcharge] varchar(8000),\n\t[tipAmount] float,\n\t[tollsAmount] float,\n\t[totalAmount] float\n\t)\n\tWITH (\n\tLOCATION = 'yellow/puYear=*/puMonth=*/*.parquet',\n\tDATA_SOURCE = [nyctlc_azureopendatastorage_blob_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM nyc_yellow_taxi\nGO\n\n",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "serverlessv2"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/create external table trip')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "CREATE EXTERNAL FILE FORMAT [SynapsecsvFormt] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nCREATE EXTERNAL DATA SOURCE [adls_gen2_trip] \n\tWITH (\n\t\tLOCATION   = 'https://ajmnugiqxczz6x2poc.blob.core.windows.net/independent' \n\t)\nGo\n\nCREATE EXTERNAL TABLE trip_data (\n\n\n\t)\n\tWITH (\n\tLOCATION = '',\n\tDATA_SOURCE = [adls_gen2_trip],\n\tFILE_FORMAT = [SynapsecsvFormt] \n\t)\nGO\n\nSELECT TOP 100 * FROM nyc_yellow_taxi\nGO",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"poolName": "Built-in",
+						"databaseName": "master"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
 			},
 			"dependsOn": []
 		},
@@ -1316,71 +1764,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/ajmnugiqxczz6x2pocws1p1')]",
-			"type": "Microsoft.Synapse/workspaces/sqlPools",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"collation": "SQL_Latin1_General_CP1_CI_AS",
-				"maxSizeBytes": 263882790666240,
-				"restorePointInTime": "0001-01-01T00:00:00",
-				"annotations": []
-			},
-			"dependsOn": [],
-			"location": "westus"
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/default')]",
-			"type": "Microsoft.Synapse/workspaces/managedVirtualNetworks",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/default/managedPrivateEndpoint1')]",
-			"type": "Microsoft.Synapse/workspaces/managedVirtualNetworks/managedPrivateEndpoints",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"privateLinkResourceId": "/subscriptions/edf6dd9d-7c4a-4bca-a997-945f3d60cf4e/resourceGroups/rg-poc-test/providers/Microsoft.Storage/storageAccounts/ajmnugiqxczz6x2poc",
-				"groupId": "dfs"
-			},
-			"dependsOn": [
-				"[concat(variables('workspaceId'), '/managedVirtualNetworks/default')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/nyc_tlc_yellow')]",
-			"type": "Microsoft.Synapse/workspaces/linkedServices",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobStorage",
-				"typeProperties": {
-					"sasUri": "[parameters('nyc_tlc_yellow_sasUri')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('workspaceName'), '/Create external table in serverlessDB')]",
-			"type": "Microsoft.Synapse/workspaces/sqlscripts",
-			"apiVersion": "2019-06-01-preview",
-			"properties": {
-				"content": {
-					"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseParquetFormat') \n\tCREATE EXTERNAL FILE FORMAT [SynapseParquetFormat] \n\tWITH ( FORMAT_TYPE = PARQUET)\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'nyctlc_azureopendatastorage_blob_core_windows_net') \n\tCREATE EXTERNAL DATA SOURCE [nyctlc_azureopendatastorage_blob_core_windows_net] \n\tWITH (\n\t\tLOCATION   = 'https://azureopendatastorage.blob.core.windows.net/nyctlc', \n\t)\nGo\n\nCREATE EXTERNAL TABLE nyc_yellow_taxi (\n\t[vendorID] varchar(8000),\n\t[tpepPickupDateTime] datetime2(7),\n\t[tpepDropoffDateTime] datetime2(7),\n\t[passengerCount] int,\n\t[tripDistance] float,\n\t[puLocationId] varchar(8000),\n\t[doLocationId] varchar(8000),\n\t[startLon] float,\n\t[startLat] float,\n\t[endLon] float,\n\t[endLat] float,\n\t[rateCodeId] int,\n\t[storeAndFwdFlag] varchar(8000),\n\t[paymentType] varchar(8000),\n\t[fareAmount] float,\n\t[extra] float,\n\t[mtaTax] float,\n\t[improvementSurcharge] varchar(8000),\n\t[tipAmount] float,\n\t[tollsAmount] float,\n\t[totalAmount] float\n\t)\n\tWITH (\n\tLOCATION = 'yellow/puYear=*/puMonth=*/*.parquet',\n\tDATA_SOURCE = [nyctlc_azureopendatastorage_blob_core_windows_net],\n\tFILE_FORMAT = [SynapseParquetFormat]\n\t)\nGO\n\nSELECT TOP 100 * FROM nyc_yellow_taxi\nGO\n\n",
-					"metadata": {
-						"language": "sql"
-					},
-					"currentConnection": {
-						"poolName": "Built-in",
-						"databaseName": "serverlessv2"
-					},
-					"resultLimit": 5000
-				},
-				"type": "SqlQuery"
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('workspaceName'), '/Load to DataFrame')]",
 			"type": "Microsoft.Synapse/workspaces/notebooks",
 			"apiVersion": "2019-06-01-preview",
@@ -1424,21 +1807,65 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 5,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
-					},
-					"sessionKeepAliveTimeout": 30
+						"memory": 56
+					}
 				},
 				"cells": [
 					{
 						"cell_type": "code",
-						"metadata": {},
 						"source": [
 							"from azureml.opendatasets import NycTlcYellow\n",
 							"\n",
 							"data = NycTlcYellow()\n",
 							"df = data.to_spark_dataframe()\n",
 							"# Display 10 rows\n",
+							"display(df.limit(10))"
+						],
+						"outputs": [],
+						"execution_count": null
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/Notebook 1')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "python"
+					},
+					"language_info": {
+						"name": "python"
+					}
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							"%%pyspark\r\n",
+							"df = spark.read.load('abfss://public@ajmnugiqxczz6x2poc.dfs.core.windows.net/fares-data.csv', format='csv'\r\n",
+							"## If header exists uncomment line below\r\n",
+							"##, header=True\r\n",
+							")\r\n",
 							"display(df.limit(10))"
 						],
 						"outputs": [],
@@ -1492,10 +1919,8 @@
 						"sparkVersion": "2.4",
 						"nodeCount": 5,
 						"cores": 8,
-						"memory": 56,
-						"automaticScaleJobs": false
-					},
-					"sessionKeepAliveTimeout": 30
+						"memory": 56
+					}
 				},
 				"cells": [
 					{
@@ -1521,53 +1946,36 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('workspaceName'), '/Notebook 1')]",
-			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"name": "[concat(parameters('workspaceName'), '/ajmnugiqxczz6x2pocws1p1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
 			"apiVersion": "2019-06-01-preview",
 			"properties": {
-				"nbformat": 4,
-				"nbformat_minor": 2,
-				"sessionProperties": {
-					"driverMemory": "28g",
-					"driverCores": 4,
-					"executorMemory": "28g",
-					"executorCores": 4,
-					"numExecutors": 2,
-					"conf": {
-						"spark.dynamicAllocation.enabled": "false",
-						"spark.dynamicAllocation.minExecutors": "2",
-						"spark.dynamicAllocation.maxExecutors": "2"
-					}
-				},
-				"metadata": {
-					"saveOutput": true,
-					"kernelspec": {
-						"name": "synapse_pyspark",
-						"display_name": "python"
-					},
-					"language_info": {
-						"name": "python"
-					},
-					"sessionKeepAliveTimeout": 30
-				},
-				"cells": [
-					{
-						"cell_type": "code",
-						"metadata": {},
-						"source": [
-							"%%pyspark\r\n",
-							"df = spark.read.load('abfss://public@ajmnugiqxczz6x2poc.dfs.core.windows.net/fares-data.csv', format='csv'\r\n",
-							"## If header exists uncomment line below\r\n",
-							"##, header=True\r\n",
-							")\r\n",
-							"display(df.limit(10))"
-						],
-						"outputs": [],
-						"execution_count": null
-					}
-				]
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"restorePointInTime": "0001-01-01T00:00:00",
+				"annotations": []
 			},
+			"dependsOn": [],
+			"location": "westus"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/default')]",
+			"type": "Microsoft.Synapse/workspaces/managedVirtualNetworks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/default/managedPrivateEndpoint1')]",
+			"type": "Microsoft.Synapse/workspaces/managedVirtualNetworks/managedPrivateEndpoints",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"privateLinkResourceId": "/subscriptions/edf6dd9d-7c4a-4bca-a997-945f3d60cf4e/resourceGroups/rg-poc-test/providers/Microsoft.Storage/storageAccounts/ajmnugiqxczz6x2poc",
+				"groupId": "dfs"
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/managedVirtualNetworks/default')]"
+			]
 		}
 	]
 }
